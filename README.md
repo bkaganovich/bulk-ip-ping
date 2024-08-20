@@ -1,44 +1,52 @@
-# `ping_ips.sh`
+# bulk-ping-tools
 
-## Description
-A Bash script to ping a list of IP addresses and display the status or specific error for each IP address.
+## Overview
+Scripts for scanning subnets and pinging hosts.
 
-## Usage
-1. **Edit IP List:** Update the `IPS` array in the script with your IP addresses.
-2. **Run Script:** Execute the script using:
+## Requirements
+- `nmap` must be installed.
+
+## Setup
+1. Make scripts executable:
    ```bash
-   ./ping_ips.sh
+   chmod +x subnet_scan.sh bulk_ping.sh
    ```
 
+## Usage
+1. **Add subnets:**
+   - Manually add to `subnets.txt` or run:
+     ```bash
+     ./subnet_scan.sh
+     ```
+     Enter subnets, then type 'q' to start scanning.
+
+2. **Run the scan:**
+   ```bash
+   ./subnet_scan.sh
+   ```
+   - Results saved to `hosts.txt`.
+   - Note: Scanning many networks can take a few minutes.
+
+3. **Monitor scan progress:**
+   - In a separate terminal:
+     ```bash
+     watch -d cat hosts.txt
+     ```
+   - For detailed network activity:
+     ```bash
+     sudo tcpdump -i <interface>
+     ```
+
+4. **Ping hosts:**
+   ```bash
+   ./bulk_ping.sh
+   ```
+   - Pings hosts in `hosts.txt`.
+
 ## Example
-### Command
 ```bash
-./ping_ips.sh
+./subnet_scan.sh
+./bulk_ping.sh
 ```
 
-### Output
-```bash
-192.168.1.1 - OK
-192.168.1.2 - ERROR: 100% packet loss (No response)
-8.8.8.8 - OK
-8.8.4.4 - OK
-203.0.113.254 - OK
-10.0.0.1 - ERROR: 100% packet loss (No response)
-10.0.0.2 - ERROR: 100% packet loss (No response)
-10.0.0.3 - ERROR: 100% packet loss (No response)
-10.0.0.4 - ERROR: 100% packet loss (No response)
-10.0.0.5 - ERROR: 100% packet loss (No response)
-```
-
-## Error Messages
-- `Network is unreachable`: Network issue.
-- `Host is down`: Target host not responding.
-- `Destination Host Unreachable`: Router issue.
-- `Request timed out`: No response within timeout.
-- `Unknown host`: DNS resolution failure.
-- `100% packet loss (No response)`: Target unreachable.
-- `An unknown error occurred`: Unhandled error.
-
-## Notes
-- Ensure the script has executable permissions with `chmod +x ping_ips.sh`.
-- Modify the IP list as needed for your network.
+If `nmap` is not installed, manually add IPs to `hosts.txt`.
